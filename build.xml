@@ -1,0 +1,44 @@
+<project name="SpaceInvaders" default="jarfile">
+
+    <!-- Initialize build properties  -->
+    <target name="init" description="Initializes properties">
+        <property name="SpaceInvaders" value="SpaceInvaders"/>
+        <property name="build.dir" value="build"/>
+        <property name="classes.dir" value="${build.dir}/classes"/>
+        <property name="src.dir" value="src"/>
+        <property name="Main.class" value="org.academiadecodigo.spaceinvaders.Main"/>
+        <property name="lib.dir" value="lib"/>
+        <property name="Resources.dir" value="resources"/>
+        <path id="classpath">
+            <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        </path>
+    </target>
+
+    <!-- Compiles the source code -->
+    <target name="compile" description="Compiles the source code" depends="init">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" source="1.7" target="1.7">
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <!-- Creates a JAR file -->
+    <target name="jarfile" description="Archives the code" depends="compile">
+        <jar destfile="${build.dir}/${SpaceInvaders}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${Main.class}"/>
+                <attribute name="Class-Path" value="${lib.dir} ${Resources.dir}"/>
+            </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="*.jar"/>
+            <fileset dir=".">
+                <include name="**/${Resources.dir}/**"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <!-- Removes the build directory -->
+    <target name="clean" description="Clean up project" depends="init">
+        <delete dir="${build.dir}"/>
+    </target>
+
+</project>
